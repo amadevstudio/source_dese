@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["_original.ts"],
+  "sourcesContent": ["function greet() {\n  console.log(\"hello\");\n}\n\nfunction fail() {\n  throw new Error(\"fail\");\n}\n\ngreet();\nfail();\n"],
+  "mappings": "AAAA,SAASA,GAAQ,CACf,QAAQ,IAAI,OAAO,CACrB,CAEA,SAASC,GAAO,CACd,MAAM,IAAI,MAAM,MAAM,CACxB,CAEAD,EAAM,EACNC,EAAK",
+  "names": ["greet", "fail"]
+}

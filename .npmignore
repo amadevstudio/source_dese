@@ -1,0 +1,11 @@
+e2e/
+tests/
+assets/
+.github/
+.env*
+!.env.example
+nodemon.json
+tsconfig.json
+tsoa.json
+Dockerfile
+src/
