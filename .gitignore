@@ -31,3 +31,6 @@ coverage/
 
 # Runtime assets (user-provided sourcemaps)
 assets/
+
+# Playground
+playground/
