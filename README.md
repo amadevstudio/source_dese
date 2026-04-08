@@ -4,10 +4,13 @@ Self-hosted microservice that decodes minified JavaScript stack traces back to o
 
 Drop-in replacement for uploading sourcemaps to Sentry/Bugsnag - keep your sourcemaps on your own server.
 
+Built on top of [`sourcemap-decode`](https://www.npmjs.com/package/sourcemap-decode) — the core decoding library that handles stack trace parsing, sourcemap resolution, and single-line bundle support. This service is an HTTP wrapper that exposes the library as a REST API.
+
 ## Features
 
 - **Framework-agnostic** - works with any JS bundler (Webpack, Vite, esbuild, Rollup)
 - **Single-line bundle support** - correctly handles minified bundles where the browser displays line:col differently from the sourcemap
+- **Recursive sourcemap lookup** - finds `.map` files in nested directory structures (Next.js, code splitting)
 - **Lenient JSON parsing** - accepts stack traces with raw control characters (newlines, tabs) inside JSON strings
 - **Swagger docs** - auto-generated OpenAPI docs at `/api-docs`
 - **Docker-ready** - multi-stage Dockerfile included
@@ -145,13 +148,16 @@ const { decoded } = await response.json();
 ## Testing
 
 ```bash
-npm test          # run once
+npm test            # unit tests
+npm run test:e2e    # e2e — starts the server, sends real HTTP requests
+npm run test:all    # everything
 npm run test:watch  # watch mode
 ```
 
 ## Acknowledgements
 
-This project is built on top of [@jridgewell/trace-mapping](https://github.com/jridgewell/trace-mapping) by [Justin Ridgewell](https://github.com/jridgewell) — the fastest JavaScript sourcemap consumer available (~447K ops/sec). It powers sourcemap resolution in tools like Vite, Rollup, and many others.
+- [`sourcemap-decode`](https://github.com/amadevstudio/sourcemap_decoder) — the core library that powers this service
+- [`@jridgewell/trace-mapping`](https://github.com/jridgewell/trace-mapping) by [Justin Ridgewell](https://github.com/jridgewell) — the fastest JavaScript sourcemap consumer available (~447K ops/sec), used internally by sourcemap-decode
 
 ## License
 
