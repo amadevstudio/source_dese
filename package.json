@@ -53,6 +53,6 @@
     "sourcemap-decode": "^0.1.0",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.6.0",
-    "zod": "^3.25.76"
+    "zod": "^4.3.6"
   }
 }
