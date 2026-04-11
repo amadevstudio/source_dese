@@ -1,6 +1,9 @@
 import { Body, Post, Route, Response, Controller } from "tsoa";
-import { parseStackTrace } from "../utils/stackParser.js";
-import { decodeFrame, type DecodedFrame } from "../utils/sourceMapDecoder.js";
+import {
+  decodeStackTrace,
+  type DecodedFrame,
+} from "sourcemap-decode";
+import { config } from "../config/config.js";
 
 export interface DecodeTraceRequest {
   /** Raw stack trace string from the browser */
@@ -30,9 +33,10 @@ export class TraceController extends Controller {
   ): Promise<DecodeTraceResponse> {
     const { stack } = body;
 
-    const frames = parseStackTrace(stack);
-    const decoded = frames.map((frame) => decodeFrame(frame));
+    const result = decodeStackTrace(stack, {
+      assetsPath: config.sourcemapAssetsPath,
+    });
 
-    return { decoded };
+    return { decoded: result.frames ?? [] };
   }
 }

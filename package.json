@@ -14,7 +14,9 @@
     "start": "node dist/server.js",
     "dev": "tsoa spec-and-routes && nodemon --exec 'tsx src/server.ts'",
     "lint": "eslint 'src/**/*.ts'",
-    "test": "vitest run",
+    "test": "vitest run --exclude e2e/",
+    "test:e2e": "vitest run e2e/",
+    "test:all": "vitest run",
     "test:watch": "vitest"
   },
   "keywords": [
@@ -47,8 +49,8 @@
     "vitest": "^4.1.3"
   },
   "dependencies": {
-    "@jridgewell/trace-mapping": "^0.3.31",
     "express": "^5.1.0",
+    "sourcemap-decode": "^0.1.0",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.6.0",
     "zod": "^3.25.76"

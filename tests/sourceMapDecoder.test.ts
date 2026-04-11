@@ -1,22 +1,20 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import path from "path";
+import { decodeFrame, type StackFrame } from "sourcemap-decode";
 
-// Mock config before importing decodeFrame
-vi.mock("../src/config/config.js", () => ({
-  config: {
-    port: 3000,
-    nodeEnv: "test",
-    sourcemapAssetsPath: path.resolve("tests/fixtures"),
-  },
-}));
+const FIXTURES_PATH = path.resolve("tests/fixtures");
 
-import { decodeFrame } from "../src/utils/sourceMapDecoder.js";
+function resolve(file: string): string {
+  return path.join(FIXTURES_PATH, path.basename(file) + ".map");
+}
 
-describe("decodeFrame", () => {
+function decode(frame: StackFrame) {
+  return decodeFrame(frame, resolve, false, /$/);
+}
+
+describe("decodeFrame (via sourcemap-decode)", () => {
   it("decodes a frame from a single-line bundle", () => {
-    // test-bundle.js is single-line: `function o(){console.log("hello")}function l(){throw new Error("fail")}o();l();`
-    // The sourcemap maps to _original.ts
-    const result = decodeFrame({
+    const result = decode({
       file: "test-bundle.js",
       line: 1,
       column: 1,
@@ -29,9 +27,7 @@ describe("decodeFrame", () => {
   });
 
   it("decodes the greet function position", () => {
-    // `function o()` starts at column 0 in the minified output
-    // Should map to `function greet()` at line 1 in _original.ts
-    const result = decodeFrame({
+    const result = decode({
       file: "test-bundle.js",
       line: 1,
       column: 1,
@@ -44,9 +40,7 @@ describe("decodeFrame", () => {
   });
 
   it("decodes the fail function position", () => {
-    // `function l()` starts around column 35 in the minified output
-    // Should map to `function fail()` at line 5 in _original.ts
-    const result = decodeFrame({
+    const result = decode({
       file: "test-bundle.js",
       line: 1,
       column: 35,
@@ -59,9 +53,7 @@ describe("decodeFrame", () => {
   });
 
   it("handles single-line sourcemap with multi-line browser display", () => {
-    // multiline-display.js has 3 lines but its .map has 1 mapping line
-    // Browser shows line 2, col 1 — should be recalculated to absolute offset
-    const result = decodeFrame({
+    const result = decode({
       file: "multiline-display.js",
       line: 2,
       column: 1,
@@ -72,19 +64,9 @@ describe("decodeFrame", () => {
     expect(result.file).toContain("_original.ts");
   });
 
-  it("returns error for missing JS file", () => {
-    const result = decodeFrame({
-      file: "nonexistent.js",
-      line: 1,
-      column: 1,
-    });
-
-    expect(result.error).toBe("JS file not found: nonexistent.js");
-  });
-
   it("returns error for missing sourcemap", () => {
-    const result = decodeFrame({
-      file: "_original.ts",
+    const result = decode({
+      file: "nonexistent.js",
       line: 1,
       column: 1,
     });
@@ -93,7 +75,7 @@ describe("decodeFrame", () => {
   });
 
   it("preserves original frame metadata", () => {
-    const result = decodeFrame({
+    const result = decode({
       file: "test-bundle.js",
       line: 1,
       column: 1,
