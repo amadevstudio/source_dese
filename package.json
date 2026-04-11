@@ -1,9 +1,14 @@
 {
-  "name": "sourcemap-decode-service",
+  "name": "source-dese",
   "version": "0.1.0",
   "description": "Standalone microservice that decodes minified JavaScript stack traces using sourcemaps",
   "type": "module",
   "main": "dist/server.js",
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsoa spec-and-routes && esbuild src/server.ts --bundle --platform=node --format=esm --outfile=dist/server.js --packages=external --loader:.json=json && cp src/generated/swagger.json dist/swagger.json",
     "start": "node dist/server.js",
