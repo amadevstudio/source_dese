@@ -1,0 +1,7 @@
+{
+  "watch": ["src/**/*.ts"],
+  "ext": "ts",
+  "ignore": ["src/routes.ts", "src/swagger.json"],
+  "exec": "tsx src/server.ts",
+  "delay": 1000
+}

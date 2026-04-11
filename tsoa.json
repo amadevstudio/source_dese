@@ -1,0 +1,19 @@
+{
+  "entryFile": "src/server.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "spec": {
+    "outputDirectory": "src/generated",
+    "specVersion": 3,
+    "basePath": "/",
+    "yaml": false,
+    "specMerging": "recursive",
+    "securityDefinitions": {},
+    "host": "localhost:3000",
+    "schemes": ["http"]
+  },
+  "routes": {
+    "routesDir": "src/generated",
+    "routesFileName": "routes.ts"
+  }
+}
