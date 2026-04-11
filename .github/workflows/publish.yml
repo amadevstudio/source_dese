@@ -51,3 +51,9 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/source-dese:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/source-dese:${{ github.ref_name }}
+      - uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/source-dese
+          readme-filepath: ./README.md
